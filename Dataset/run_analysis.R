@@ -33,8 +33,14 @@ mergeTwoFiles <- function(firstFileName, secondFileName) {
 
 # Step 2
 
-extractMeanAndStandardDeviation <- function() {
+extractMeansAndStandardDeviations <- function(filePath) {
+    features <- read.table("./features.txt")$V2;
+    meanAndStdevRegEx <- "(-mean\\(\\))|(-std\\(\\))";
+    meansAndStdevs <- as.logical(sapply(features, function(f) { grepl(meanAndStdevRegEx, f); }));
     
+    fileData <- read.table(filePath);
+    fileDataSubset <- fileData[, meansAndStdevs];
+    fileDataSubset;
 }
 
 # Step 3
