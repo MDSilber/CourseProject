@@ -43,12 +43,16 @@ run_analysis <- function() {
     # step 3 - Name activities meaningfully and merge them into the table
     
     activity_labels <- c("Laying", "Sitting", "Standing", "Walking", "Walking Downstairs", "Walking Upstairs");
-    unnamedActivities <- read.table("merged/y_merged.txt")[,1];
+    unnamedActivities <- read.table("merged/y_merged.txt")[, 1];
     namedActivities <- sapply(unnamedActivities, function(x) { activity_labels[x] });
     fileDataSubset <- cbind(namedActivities, fileDataSubset);
 
     print("Activities named!");
 
+    # step 3a - Add subjects to table
+    subjects <- read.table("merged/subject_merged.txt")[, 1];
+    fileDataSubset <- cbind(subjects, fileDataSubset)
+    
     # step 4 - Name columns meaningfully
     
     columnNames <- unlist(sapply(features[meansAndStdevs], function(x) {
@@ -61,6 +65,9 @@ run_analysis <- function() {
         paste(splitString[,1], collapse="");
     }))
     
-    names(fileDataSubset) <- c("Activity", columnNames);
+    names(fileDataSubset) <- c("Subject", "Activity", columnNames);
     print ("Columns named!");
+
+    # step 5 - Add subjects to table and create table with averages
+    
 }
