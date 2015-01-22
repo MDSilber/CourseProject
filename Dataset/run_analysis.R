@@ -1,3 +1,5 @@
+library(dplyr)
+
 mergeTwoFiles <- function(firstFileName, secondFileName) {
     fileBaseName <- strsplit(firstFileName, "_")[[1]][1];
     print(firstFileName);
@@ -68,6 +70,10 @@ run_analysis <- function() {
     names(fileDataSubset) <- c("Subject", "Activity", columnNames);
     print ("Columns named!");
 
-    # step 5 - Add subjects to table and create table with averages
+    # step 5 - Create tidy data using dplyr
+    dfTblFileDataSubset <- tbl_df(fileDataSubset);
+    groupedData <- group_by(dfTblFileDataSubset, Activity, Subject);
+    summarizedData <- summarise_each(groupedData, funs(mean));
     
+    write.table(summarizedData, file="tidy_data.txt");
 }
