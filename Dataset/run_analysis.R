@@ -1,22 +1,3 @@
-# Step 1
-
-mergeDataSets <- function() {
-    testFileNames <- list.files("test", pattern = "*.txt");
-    trainFileNames <- list.files("train", pattern = "*.txt");
-    
-    filePairs <- cbind(testFileNames, trainFileNames);
-    
-    dir.create("merged");
-
-    for (row in 1:nrow(filePairs)) {
-        firstFile <- filePairs[row,][[1]];
-        secondFile <- filePairs[row,][[2]];
-        mergeTwoFiles(firstFile, secondFile);    
-    }
-    
-    print("Merged!!");
-}
-
 mergeTwoFiles <- function(firstFileName, secondFileName) {
     fileBaseName <- strsplit(firstFileName, "_")[[1]][1];
     print(firstFileName);
@@ -31,32 +12,45 @@ mergeTwoFiles <- function(firstFileName, secondFileName) {
     write.table(mergedFile, paste("merged", mergedFileBaseName, sep="/"));
 }
 
-# Step 2
+# step 1 - merge files
+testFileNames <- list.files("test", pattern = "*.txt");
+trainFileNames <- list.files("train", pattern = "*.txt");
 
-extractMeansAndStandardDeviations <- function(filePath) {
-    features <- read.table("./features.txt")$V2;
-    meanAndStdevRegEx <- "(-mean\\(\\))|(-std\\(\\))";
-    meansAndStdevs <- as.logical(sapply(features, function(f) { grepl(meanAndStdevRegEx, f); }));
-    
-    fileData <- read.table(filePath);
-    fileDataSubset <- fileData[, meansAndStdevs];
-    fileDataSubset;
+filePairs <- cbind(testFileNames, trainFileNames);
+
+if (!file.exists("merged")) {
+    dir.create("merged");
+    for (row in 1:nrow(filePairs)) {
+        firstFile <- filePairs[row,][[1]];
+        secondFile <- filePairs[row,][[2]];
+        mergeTwoFiles(firstFile, secondFile);    
+    }
 }
 
-# Step 3
+print("Merged!!");
 
-nameActivities <- function() {
+# step 2 - extract means and standard deviations
+features <- read.table(".features.txt")$V2;
+meanAndStdevRegEx <- "(-mean\\(\\))|(-std\\(\\))";
+meansAndStdevs <- as.logical(sapply(features, function(f) { grepl(meanAndStdevRegEx, f); }));
+
+fileData <- read.table("merged/X_merged.txt");
+fileDataSubset <- fileData[, meansAndStdevs];
+
+print("Mean and standard deviation extracted!");
+
+# step 3 - Name activities meaningfully and merge them into the table
+
+# step 4 - Name columns meaningfully
+
+columnNames <- unlist(sapply(features[meansAndStdevs], function(x) {
+    splitString <- sapply(strsplit(as.character(x), "-"), function(y) {
+        firstLetter <- substring(y, 1, 1);
+        tidiedString <- gsub("\\(\\)", "", substring(y, 2, nchar(y)));
+        paste(toupper(firstLetter), tidiedString, sep="");
+    });
     
-}
+    paste(splitString[,1], collapse="");
+}))
 
-# Step 4
-
-labelDataSet <- function() {
-    
-}
-
-# Step 5
-
-createTidyDataSet <- function() {
-    
-}
+names(fileDataSubset) <- columnNames;
