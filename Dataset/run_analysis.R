@@ -77,3 +77,5 @@ run_analysis <- function() {
     
     write.table(summarizedData, file="tidy_data.txt");
 }
+
+run_analysis()
