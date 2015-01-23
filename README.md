@@ -1,7 +1,7 @@
 Getting and Cleaning Data Course Project
 ========================================
 
-The script run _ analysis.R is designed to take two data sets from the same
+The script run\_analysis.R is designed to take two data sets from the same
 experiment, merge them, run some analysis, and tidy the data before writing it
 out to the file system. The script is split up into five sections, each of which
 will be discussed below.
@@ -34,7 +34,7 @@ Step 3: Naming the activities
 
 In this step, we name the activities meaningfully, and merge them into the
 dataset. In order to do this, we create a character vector of human readable
-activities based on the activity _ labels.txt file. Then we read in the file
+activities based on the activity\_labels.txt file. Then we read in the file
 indicating the activities, and create a table where the numbered activities have
 been made human-readable by translating via the character vector we created. We
 then bind this column to the data.
@@ -58,13 +58,13 @@ Step 5: Creating tidy data from this modified data set
 ------------------------------------------------------
 
 In the last step, we utilize the dplyr library, which makes summarizing data
-very easy in R. First we convert our data.frame into a tbl _ df object. Then,
-using the group _ by function, we add groups based on activity and subject to
+very easy in R. First we convert our data.frame into a tbl\_df object. Then,
+using the group\_by function, we add groups based on activity and subject to
 the data. From there, we can summarize the data based on these groups by taking
 the average of each measurement, and then write them out to the file system.
 
 Conclusion
 ----------
 
-Once these steps have been performed, we have a file called tidy _ data.txt in
+Once these steps have been performed, we have a file called tidy\_data.txt in
 our directory which has our summarized, cleaned data!
