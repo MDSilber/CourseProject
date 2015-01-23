@@ -31,16 +31,12 @@ run_analysis <- function() {
     # bind the file names into a table to be processed
     filePairs <- cbind(testFileNames, trainFileNames);
     
-    # make sure the merged files haven't been craeted yet
-    if (!file.exists("merged")) {
-        dir.create("merged");
-        
-        # merge each file pair and write them out to the console
-        for (row in 1:nrow(filePairs)) {
-            firstFile <- filePairs[row,][[1]];
-            secondFile <- filePairs[row,][[2]];
-            mergeTwoFiles(firstFile, secondFile);    
-        }
+    dir.create("merged");        
+    # merge each file pair and write them out to the console
+    for (row in 1:nrow(filePairs)) {
+        firstFile <- filePairs[row,][[1]];
+        secondFile <- filePairs[row,][[2]];
+        mergeTwoFiles(firstFile, secondFile);    
     }
     
     print("Merged!!");
@@ -65,7 +61,7 @@ run_analysis <- function() {
     ############################
     
     # create human-readable names for the activities based on the activity_labels file
-    activity_labels <- c("Laying", "Sitting", "Standing", "Walking", "Walking Downstairs", "Walking Upstairs");
+    activity_labels <- c("Walking", "Walking Upstairs", "Walking Downstairs", "Sitting", "Standing", "Laying");
     
     # read in the activities and create a list with the numbered
     # activities translated into the human-readable activities
@@ -118,6 +114,7 @@ run_analysis <- function() {
     
     # write the tidy data to the file system!
     write.table(summarizedData, file="tidy_data.txt", row.names = FALSE);
+    unlink("merged/", recursive = TRUE);
     print ("Tidy data generated in tidy_data.txt!");
 }
 
