@@ -2,8 +2,6 @@ library(dplyr)
 
 mergeTwoFiles <- function(firstFileName, secondFileName) {
     fileBaseName <- strsplit(firstFileName, "_")[[1]][1];
-    print(firstFileName);
-    print(secondFileName);
     
     firstFile <- read.table(paste("test", firstFileName, sep="/"));
     secondFile <- read.table(paste("train", secondFileName, sep="/"));
@@ -75,7 +73,8 @@ run_analysis <- function() {
     groupedData <- group_by(dfTblFileDataSubset, Activity, Subject);
     summarizedData <- summarise_each(groupedData, funs(mean));
     
-    write.table(summarizedData, file="tidy_data.txt");
+    write.table(summarizedData, file="tidy_data.txt", row.names = FALSE);
+    print ("Tidy data generated in tidy_data.txt!");
 }
 
 run_analysis()
